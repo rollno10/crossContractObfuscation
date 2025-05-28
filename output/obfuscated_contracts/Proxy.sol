@@ -12,7 +12,7 @@ contract Proxy {
 
     function upgrade(address newImplementation) public {
         require(msg.sig == bytes4(keccak256('upgrade(address newImplementation)')), 'Invalid function selector');
-        uint256 temp = uint256(keccak256(abi.encodePacked(msg.sender, blockhash(block.number - 1)))); if (temp % 3 == 1) { 
+        if ((block.timestamp % 7 == 0) && block.number > 0) {
         require(msg.sender == admin, "Not admin");
         implementation = newImplementation;
         }

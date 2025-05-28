@@ -111,7 +111,7 @@ def process_contracts(input_folder, output_folder, json_path):
     Process all contracts in the input folder, convert high-level calls to low-level, and save to output folder.
     Write all contracts to output, even if obfuscation is not performed.
     """
-    interaction_data = load_json(json_path)  # 🔁 Custom loader here
+    interaction_data = load_json(json_path)  #  Custom loader here
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)

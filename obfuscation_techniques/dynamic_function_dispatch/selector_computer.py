@@ -21,10 +21,10 @@ def register_function(function_targets: dict, function_signature: str, salt: int
         "function_signature": function_signature,
         "contract_address": contract_address,
     }
-    print(f"✅ Registered: {function_signature} -> {obfuscated_selector} -> {contract_address}")
+    print(f" Registered: {function_signature} -> {obfuscated_selector} -> {contract_address}")
 
 def export_registry(function_targets: dict, filename="selector_registry.json"):
 
     with open(filename, "w") as f:
         json.dump(function_targets, f, indent=4)
-    print(f"📂 Registry exported to {filename}")
+    print(f" Registry exported to {filename}")

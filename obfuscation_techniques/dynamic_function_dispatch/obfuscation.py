@@ -81,4 +81,4 @@ def process_obfuscation(input_folder: str, json_file: str, output_folder: str):
 
             print(f"✅ Processed: {filename}")
 
-    print(f"✅ Obfuscation completed. Check the '{output_folder}' folder.")
+    print(f" Obfuscation completed. Check the '{output_folder}' folder.")
