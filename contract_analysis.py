@@ -63,8 +63,7 @@ def analyze_contract(contract_path):
                 "function": func,
                 "interaction_type": "high_level",  # Updated field
                 "interaction_role": interaction_role,  # Added role
-                "function_signature": f"{func}({args})",  # Extra field
-                "contract_address": "0x0000000000000000000000000000000000000000"  # Placeholder for high-level interaction
+                "function_signature": f"{func}({args})",  # Extra field 
             })
 
     # 2. Low-Level Calls (call, staticcall ONLY)
@@ -107,7 +106,6 @@ def analyze_contract(contract_path):
             "caller": contract_name,
             "interaction_type": "proxy",  # Updated field
             "interaction_role": "middleware",  # Added role (proxy -> middleware)
-            "details": "Detected keywords indicating proxy pattern"
         })
 
     return interactions
@@ -136,4 +134,4 @@ def manual_analysis(folder_path):
     with open(output_file, "w", encoding='utf-8') as json_file:
         json.dump({"interactions": all_interactions}, json_file, indent=4)
 
-    logging.info(f"✅ Manual Analysis Completed Successfully. Results saved to {output_file}")
+    logging.info(f" Manual Analysis Completed Successfully. Results saved to {output_file}")

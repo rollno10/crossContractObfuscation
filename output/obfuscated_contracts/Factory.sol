@@ -14,8 +14,10 @@ contract Wallet {
 contract VaultDeployer {
     function deployWallet(address user, uint256 unlockAfter) public returns (address) {
         require(msg.sig == bytes4(keccak256('deployWallet(address user, uint256 unlockAfter)')), 'Invalid function selector');
-        Wallet newWallet = ObfuscatedFactory_Wallet().deploy(0, keccak256(abi.encodePacked(block.timestamp, user, unlockAfter)), user, unlockAfter, 59, "ObfuscatedParam");
+        if ((block.timestamp % 7 == 0) && block.number > 0) {
+        Wallet newWallet = ObfuscatedFactory_Wallet().deploy(2, keccak256(abi.encodePacked(block.timestamp, user, unlockAfter)), user, unlockAfter, 27, "ObfuscatedParam");
         return address(newWallet);
+        }
     }
 }
 

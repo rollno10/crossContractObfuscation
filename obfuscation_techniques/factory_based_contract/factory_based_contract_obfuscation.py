@@ -79,4 +79,4 @@ def apply_obfuscation(input_folder, json_file):
         with open(output_path, "w") as f:
             f.write(content)
 
-        print(f"✅ Obfuscated contract written to {output_path}")
+        print(f" Obfuscated contract written to {output_path}")

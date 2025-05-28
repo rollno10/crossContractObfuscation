@@ -16,13 +16,10 @@ def generate_obfuscated_proxy(contract_code):
 
         # Detect and replace the implementation() function
         if re.search(r'\bfunction\s+implementation\s*\(\)\s*(public|external)?\s*(view)?\s*returns\s*\(\s*address\s*\)', stripped) or re.search(r'\baddress\s+public\s+implementation\s*;', stripped):
-            obfuscated_lines.append("    //  Obfuscated implementation() function with real and fake addresses")
             obfuscated_lines.append("    function implementation() external view returns (address) {")
-            obfuscated_lines.append("        // Return a fake deterministic implementation for obfuscation purposes")
             obfuscated_lines.append("        address fakeImplementation = address(uint160(uint256(keccak256(abi.encodePacked(blockhash(block.number - 1), msg.sender)))));")
             obfuscated_lines.append("        return fakeImplementation;")
             obfuscated_lines.append("    }")
-            obfuscated_lines.append("    // Alternatively provide an admin-only access to true implementation")
             obfuscated_lines.append("    function realImplementation() public view onlyAdmin returns (address) {")
             obfuscated_lines.append("        return _implementation;")
             obfuscated_lines.append("    }")
@@ -41,17 +38,14 @@ def generate_obfuscated_proxy(contract_code):
         # Replace fallback function with obfuscated logic
         if re.search(r'\bfallback\s*\(\s*\)\s*(external|public)?', stripped):
             obfuscated_lines.append("    fallback() external payable {")
-            obfuscated_lines.append("        // Dynamic routing using selector-based logic")
             obfuscated_lines.append("        address impl = _getImplementation(msg.sig);")
             obfuscated_lines.append("        require(impl != address(0), \"Invalid implementation\");")
             obfuscated_lines.append("        (bool success, ) = impl.delegatecall(msg.data);")
             obfuscated_lines.append("        require(success, \"Delegatecall to logic contract failed\");")
-            obfuscated_lines.append("        // Nested proxy routing to obscure calls")
             obfuscated_lines.append("        address nextProxy = getNextProxy();")
             obfuscated_lines.append("        require(nextProxy != address(0), \"Next proxy invalid\");")
             obfuscated_lines.append("        (bool success2, ) = nextProxy.delegatecall(msg.data);")
             obfuscated_lines.append("        require(success2, \"Nested delegatecall failed\");")
-            obfuscated_lines.append("    }")
             continue
 
         # Default: keep original line
@@ -64,22 +58,19 @@ def generate_obfuscated_proxy(contract_code):
     # Add helper functions for dynamic routing
     if "_getImplementation" not in contract_code and "getNextProxy" not in contract_code:
         helper_code = """
-//  Helper function to resolve implementation by selector
+
 function _getImplementation(bytes4 selector) internal view returns (address) {
-    // Map function selector to actual logic contract address
+
     if (selector == bytes4(keccak256("someFunctionSignature()"))) {
-        return 0x1234567890123456789012345678901234567890; // Example address for routing
+        return 0x1234567890123456789012345678901234567890; 
     }
-    return _implementation; // Default implementation
+    return _implementation; 
 }
 
-//  Helper function for nested proxy routing
 function getNextProxy() internal view returns (address) {
-    // Return the next proxy address (replace with real-world logic)
-    return address(0xBEEFDEAD); // Example placeholder
+    return address(0xBEEFDEAD);
 }
 
-//  Admin modifier to secure critical functions
 modifier onlyAdmin() {
     require(msg.sender == _admin, "Only admin can call this function");
     _;
@@ -102,7 +93,7 @@ def process_proxy_files(contract_folder, output_folder, json_file):
             data = json.load(f)
             interactions = data.get("interactions", [])
     except Exception as e:
-        print(f"❌ Error loading JSON file: {e}")
+        print(f" Error loading JSON file: {e}")
         return
 
     # Iterate through all contracts in the folder
@@ -118,7 +109,7 @@ def process_proxy_files(contract_folder, output_folder, json_file):
             with open(input_path, "r", encoding="utf-8") as f:
                 contract_code = f.read()
         except Exception as e:
-            print(f"❌ Failed to read contract file {filename}: {e}")
+            print(f" Failed to read contract file {filename}: {e}")
             continue
 
         # Check if this contract matches a "proxy" interaction
@@ -130,16 +121,16 @@ def process_proxy_files(contract_folder, output_folder, json_file):
         if is_proxy:
             # Generate obfuscated proxy contract
             obfuscated_code = generate_obfuscated_proxy(contract_code)
-            print(f"✅ Processed (proxy): {filename}")
+            print(f" Processed (proxy): {filename}")
         else:
             # Write the contract as-is or apply placeholder obfuscation
             obfuscated_code = contract_code
-            print(f"✅ Processed (non-proxy): {filename}")
+            print(f" Processed (non-proxy): {filename}")
 
         # Write the output
         try:
             with open(output_path, "w", encoding="utf-8") as f:
                 f.write(obfuscated_code)
-            print(f"✅ Contract saved to: {output_path}")
+            print(f" Contract saved to: {output_path}")
         except Exception as e:
-            print(f"❌ Failed to save contract {filename}: {e}")
+            print(f" Failed to save contract {filename}: {e}")

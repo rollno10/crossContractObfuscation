@@ -1,22 +1,12 @@
 import os
 import json
 import re
-import secrets  # Secure random salt generation
+import secrets  
 from .selector_computer import register_function, export_registry, compute_obfuscated_selector
 
 def obfuscate_contract(contract_code: str, obfuscation_rules: list, function_targets: dict) -> str:
-    """
-    Apply dynamic function dispatch obfuscation to all Solidity contracts with high-level and low-level interactions.
-    
-    - Injects function selector validation before execution.
-    - Routes function calls dynamically via a dispatcher.
-    - Preserves contract functionality while increasing obfuscation complexity.
+    """ Injects function selector validation before execution."""
 
-    :param contract_code: Solidity contract code as a string.
-    :param obfuscation_rules: List of obfuscation rules from JSON file.
-    :param function_targets: Dictionary to store obfuscated selector mappings.
-    :return: Modified Solidity contract code.
-    """
     lines = contract_code.split("\n")
     modified_lines = []
 
@@ -59,17 +49,7 @@ def obfuscate_contract(contract_code: str, obfuscation_rules: list, function_tar
     return "\n".join(modified_lines)
 
 def process_obfuscation(input_folder: str, json_file: str, output_folder: str):
-    """
-    Reads Solidity files, applies obfuscation, and writes results to output folder.
 
-    - Ensures function execution is dynamically routed via obfuscated selectors.
-    - Applies obfuscation universally across contracts.
-    - Preserves functionality while increasing detection complexity.
-
-    :param input_folder: Folder containing Solidity files to obfuscate.
-    :param json_file: Path to JSON file with obfuscation rules.
-    :param output_folder: Folder to save obfuscated contract files.
-    """
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 

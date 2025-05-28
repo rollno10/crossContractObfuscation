@@ -4,7 +4,7 @@
             "caller": "Factory.sol",
             "callee": "Wallet",
             "interaction_type": "factory_deployment",
-            "interaction_role": "unknown"
+            "interaction_role": "initiator"
         },
         {
             "caller": "High_level.sol",
@@ -12,14 +12,14 @@
             "function": "transfer",
             "interaction_type": "high_level",
             "interaction_role": "initiator",
-            "function_signature": "transfer(amount)",
-            "contract_address": "0x0000000000000000000000000000000000000000"
+            "function_signature": "transfer(amount)"
+
         },
         {
             "caller": "Proxy.sol",
             "interaction_type": "proxy",
-            "interaction_role": "middleware",
-            "details": "Detected keywords indicating proxy pattern"
+            "interaction_role": "middleware"
+
         }
     ]
 }

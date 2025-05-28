@@ -9,8 +9,8 @@ from utils.file_handler import load_json
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Install and set the appropriate version of solc (if not already installed)
-install_solc("0.8.20")  # Use the appropriate version for your contract
-set_solc_version("0.8.20")  # This ensures compatibility with the version in your contract
+install_solc("0.8.20")  
+set_solc_version("0.8.20")  
 
 # Built-in functions that need special handling (add more as needed)
 BUILT_IN_FUNCTIONS = ['transfer', 'approve', 'mint', 'transferFrom', 'safeTransfer', 'safeApprove']
